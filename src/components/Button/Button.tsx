@@ -21,9 +21,9 @@ const Button = ({
     disabled = false,
     fullWidth = false
 }: ButtonProps) => {
-    // Base styles
+    // Base styles - FIXED: Added flex display for proper icon/text alignment
     const baseStyles =
-        "rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 relative overflow-hidden";
+        "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 relative overflow-hidden";
 
     // Size variants
     const sizeStyles = {
@@ -91,7 +91,9 @@ const Button = ({
                 ${className}
             `}
         >
-            <span className="relative z-10">{children}</span>
+            <span className="relative z-10 flex items-center gap-2">
+                {children}
+            </span>
         </button>
     );
 };
