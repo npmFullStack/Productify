@@ -1,31 +1,36 @@
 // components/common/NavBar.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Button from "@/components/Button/Button";
 
-// Define TypeScript interface for nav links
 interface NavLink {
     id: number;
     name: string;
     href: string;
 }
 
-// Updated navbar data (removed type property)
 const navLinks: NavLink[] = [
     { id: 1, name: "Home", href: "#home" },
-    { id: 2, name: "About", href: "#about" },
+    { id: 2, name: "Features", href: "#about" },
     { id: 3, name: "Pricing", href: "#pricing" },
     { id: 4, name: "Contact", href: "#contact" }
 ];
 
 const NavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const handleNavClick = (href: string) => {
         setIsMenuOpen(false);
-
-        // Handle anchor links (smooth scroll)
         const element = document.querySelector(href);
         if (element) {
             element.scrollIntoView({ behavior: "smooth" });
@@ -33,35 +38,47 @@ const NavBar = () => {
     };
 
     return (
-        <nav className="sticky top-0 z-50 w-full bg-bgColor shadow-md font-sans">
+        <nav
+            className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+                isScrolled
+                    ? "bg-white/95 backdrop-blur-lg shadow-lg"
+                    : "bg-white/95 backdrop-blur-lg md:bg-transparent"
+            }`}
+        >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                    {/* Logo - Left */}
+                <div className="flex h-20 items-center justify-between">
+                    {/* Logo */}
                     <div className="flex-shrink-0">
                         <Link
                             href="/"
                             className="flex items-center cursor-pointer"
                             onClick={() => handleNavClick("#home")}
                         >
-                            <div className="flex items-center">
-                                <span
-                                    className="font-logo font-bold text-3xl
-                                uppercase text-stroke text-primary"
-                                >
-                                    Productify
-                                </span>
-                            </div>
+                            <span
+                                className={`font-logo font-bold text-3xl
+                                uppercase text-stroke transition-all duration-300 ${
+                                    isScrolled
+                                        ? "text-primary"
+                                        : "text-gray-900 md:text-white"
+                                }`}
+                            >
+                                Productify
+                            </span>
                         </Link>
                     </div>
 
-                    {/* Navigation Links - Center (Desktop) */}
+                    {/* Desktop Navigation */}
                     <div className="hidden md:flex flex-1 justify-center">
-                        <div className="flex space-x-8">
+                        <div className="flex space-x-10">
                             {navLinks.map(link => (
                                 <button
                                     key={link.id}
                                     onClick={() => handleNavClick(link.href)}
-                                    className="text-gray-700 hover:text-secondary px-3 py-2 text-sm font-medium transition-colors duration-200"
+                                    className={`px-4 py-2 text-lg font-medium transition-all duration-200 hover:scale-105 ${
+                                        isScrolled
+                                            ? "text-gray-900 hover:text-primary"
+                                            : "text-white/90 hover:text-white"
+                                    }`}
                                 >
                                     {link.name}
                                 </button>
@@ -69,66 +86,69 @@ const NavBar = () => {
                         </div>
                     </div>
 
-                    {/* CTA Buttons - Right (Desktop) */}
+                    {/* Desktop CTA Buttons */}
                     <div className="hidden md:flex items-center space-x-4">
                         <Link href="/signin">
                             <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setIsMenuOpen(false)}
+                                variant={isScrolled ? "outline" : "white"}
+                                size="md"
+                                className={
+                                    !isScrolled
+                                        ? "border-white/30 text-gray-900 hover:bg-white/20 hover:scale-105 transition-transform"
+                                        : "hover:scale-105 transition-transform"
+                                }
                             >
                                 Sign In
                             </Button>
                         </Link>
                         <Link href="/signup">
                             <Button
-                                variant="primary"
-                                size="sm"
-                                onClick={() => setIsMenuOpen(false)}
+                                variant={isScrolled ? "primary" : "secondary"}
+                                size="md"
+                                className="hover:scale-105 transition-transform"
                             >
                                 Get Started
                             </Button>
                         </Link>
                     </div>
 
-                    {/* Mobile menu button */}
+                    {/* Mobile Menu Button */}
                     <div className="flex md:hidden">
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="inline-flex items-center justify-center
-                            p-2 rounded-md text-gray-700 hover:text-secondary hover:bg-gray-100 focus:outline-none
-                            transition-colors"
+                            className="inline-flex items-center justify-center p-3 rounded-lg text-gray-900 hover:bg-gray-100 transition-all"
                             aria-label="Toggle menu"
-                            aria-expanded={isMenuOpen}
                         >
                             {isMenuOpen ? (
-                                <X className="h-6 w-6" aria-hidden="true" />
+                                <X className="h-6 w-6" />
                             ) : (
-                                <Menu className="h-6 w-6" aria-hidden="true" />
+                                <Menu className="h-6 w-6" />
                             )}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile menu (responsive) */}
-            <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
-                <div className="space-y-1 px-2 pb-3 pt-2 bg-white border-t shadow-lg">
-                    {/* Mobile Navigation Links */}
+            {/* Mobile Menu */}
+            <div
+                className={`md:hidden transition-all duration-300 ${
+                    isMenuOpen
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 -translate-y-4 pointer-events-none"
+                } bg-white shadow-lg`}
+            >
+                <div className="px-4 pt-2 pb-4 space-y-1">
                     {navLinks.map(link => (
                         <button
                             key={link.id}
                             onClick={() => handleNavClick(link.href)}
-                            className="block w-full text-left rounded-lg px-3
-                            py-2.5 text-base font-medium text-gray-700
-                            hover:bg-gray-50 hover:text-secondary transition-colors"
+                            className="block w-full text-left rounded-lg px-4 py-3 text-lg font-medium text-gray-900 hover:bg-gray-100 hover:text-primary transition-colors"
                         >
                             {link.name}
                         </button>
                     ))}
 
-                    {/* Mobile Auth Buttons */}
-                    <div className="mt-4 pt-4 border-t space-y-2 px-3">
+                    <div className="pt-4 space-y-3 px-4">
                         <Link
                             href="/signin"
                             className="block"
@@ -137,7 +157,7 @@ const NavBar = () => {
                             <Button
                                 variant="outline"
                                 fullWidth
-                                className="justify-start"
+                                className="border-gray-300 text-gray-900 hover:border-gray-400 text-lg"
                             >
                                 Sign In
                             </Button>
@@ -147,7 +167,7 @@ const NavBar = () => {
                             className="block"
                             onClick={() => setIsMenuOpen(false)}
                         >
-                            <Button variant="primary" fullWidth>
+                            <Button variant="primary" fullWidth className="text-lg">
                                 Get Started
                             </Button>
                         </Link>

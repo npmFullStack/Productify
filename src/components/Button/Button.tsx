@@ -35,6 +35,15 @@ const Button = ({
     // Variant styles - Enhanced for more dimension
     const variantStyles = {
         primary:
+            "bg-primary text-white shadow-lg hover:shadow-xl " +
+            "border border-primary/90 hover:border-primary " +
+            "focus:ring-primary/40 " +
+            "relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent " +
+            "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] " +
+            "after:bg-white/30 after:transition-transform after:duration-300 " +
+            "hover:after:translate-y-0 active:after:bg-white/40",
+
+        secondary:
             "bg-secondary text-white shadow-lg hover:shadow-xl " +
             "border border-secondary/90 hover:border-secondary " +
             "focus:ring-secondary/40 " +
@@ -42,16 +51,7 @@ const Button = ({
             "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] " +
             "after:bg-white/30 after:transition-transform after:duration-300 " +
             "hover:after:translate-y-0 active:after:bg-white/40",
-        
-        secondary:
-            "bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-lg hover:shadow-xl " +
-            "border border-gray-600 hover:border-gray-500 " +
-            "focus:ring-gray-400 " +
-            "relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent " +
-            "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[4px] " +
-            "after:bg-gray-300/40 after:transition-transform after:duration-300 " +
-            "hover:after:translate-y-0 active:after:bg-gray-300/60",
-        
+
         outline:
             "bg-white text-gray-800 shadow-sm hover:shadow " +
             "border border-gray-300 hover:border-gray-400 " +
@@ -59,9 +59,9 @@ const Button = ({
             "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] " +
             "after:bg-gray-400 after:transition-transform after:duration-300 " +
             "after:translate-y-full hover:after:translate-y-0",
-        
+
         white:
-            "bg-gradient-to-b from-white to-gray-50 text-gray-900 shadow-md hover:shadow-lg " +
+            "bg-gradient-to-b from-white to-gray-50 text-gray-900 shadow-md hover:shadow-lg" +
             "border border-gray-200 hover:border-gray-300 " +
             "focus:ring-gray-300 " +
             "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] " +
